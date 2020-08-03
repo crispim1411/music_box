@@ -1,3 +1,4 @@
+//notas
 #define NOTE_C3  131
 #define NOTE_CS3 139 
 #define NOTE_D3  147 
@@ -23,12 +24,14 @@
 #define NOTE_AS4 466 
 #define NOTE_B4  494
 
+//tempos
 #define WHOLE 1 
 #define HALF 0.5 
 #define QUARTER 0.25 
 #define EIGHTH 0.125
 #define SIXTEENTH 0.0625
 
+//pinos
 #define interruptPin 2
 #define buzzerPin 4
 #define ledPin 13
@@ -38,6 +41,7 @@ typedef struct {
   float duration;
 } note;
 
+//lista de notas acompanhadas de sua duração
 const note notes[] {
     {NOTE_C4, HALF}, {NOTE_B3, HALF}, {NOTE_C4, HALF}, {NOTE_G4, 2*WHOLE}, {NOTE_C4, HALF},
     {NOTE_B3, WHOLE}, {NOTE_A3, 2*WHOLE+HALF}, {NOTE_A3, HALF}, {NOTE_F4, HALF}, {NOTE_E4, HALF},
@@ -51,11 +55,16 @@ const note notes[] {
     {NOTE_D4, WHOLE}, {NOTE_F4, HALF}, {NOTE_F4, 2*WHOLE}
 };
 
-int length;
-volatile byte state = LOW;
+const int notes_length = sizeof(notes)/sizeof(note);
+
+//variaveis botão
+bool state = LOW;
+bool currentState = false; 
+bool lastState = false;  
+unsigned long lastDebounceTime = 0;  
+const int debounceDelay = 250; 
 
 void setup() {
-  length = sizeof(notes);
   pinMode(buzzerPin, OUTPUT);
   pinMode(ledPin, OUTPUT);
   pinMode(interruptPin, INPUT_PULLUP);
@@ -63,7 +72,7 @@ void setup() {
 }
 
 void loop() {
-  for (int i=0; i<length && state==HIGH; i++) { 
+  for (int i=0; i<notes_length && state==HIGH; i++) { 
     int tone_to_play = notes[i].tone;
     float duration_to_play = notes[i].duration;
     tone(buzzerPin, tone_to_play); 
@@ -74,6 +83,20 @@ void loop() {
 }
 
 void interrupt() {
-  state = !state;
+  currentState = !state;
+  if (currentState != lastState) {
+    lastDebounceTime = millis();
+  }
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    if (currentState != state) {
+      state = !state;
+    }
+  }
+  lastState = currentState;
+  
   digitalWrite(ledPin, state);
+
+  if (state == LOW) {
+    noTone(buzzerPin);
+  }
 }
