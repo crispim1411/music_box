@@ -33,34 +33,41 @@
 #define buzzerPin 4
 #define ledPin 13
 
-int tune[] = { 
- NOTE_C4,NOTE_B3,NOTE_C4,NOTE_G4,NOTE_C4,NOTE_B3,NOTE_A3,NOTE_A3,NOTE_F4,NOTE_E4,NOTE_F4,NOTE_A4,NOTE_A3,
- NOTE_G3,NOTE_G4,NOTE_G4,NOTE_F4,NOTE_E4,NOTE_D4,NOTE_C4,NOTE_A4,NOTE_A4,NOTE_G4,NOTE_A4,NOTE_A4,NOTE_F4,NOTE_E4,NOTE_F4,NOTE_F4,NOTE_D4,NOTE_E4,NOTE_E4,
- NOTE_F4,NOTE_E4,NOTE_D4,NOTE_C4,NOTE_A3,NOTE_G3,NOTE_F3,NOTE_C4,NOTE_F4,NOTE_A4,NOTE_G4,NOTE_D4,NOTE_C4,NOTE_D4,NOTE_F4,NOTE_F4
-  }; 
+typedef struct { 
+  int tone;
+  float duration;
+} note;
 
-float duration[] = { 
- HALF, HALF, HALF,WHOLE+WHOLE,HALF,WHOLE,WHOLE+WHOLE+HALF,HALF,HALF,HALF,HALF,WHOLE+WHOLE,HALF,
- WHOLE,WHOLE,WHOLE,WHOLE,HALF,HALF,HALF,HALF,HALF,WHOLE,HALF,WHOLE+WHOLE,HALF,HALF,WHOLE,HALF,HALF,WHOLE+HALF,HALF,
- HALF,HALF,WHOLE,HALF,HALF,HALF,WHOLE,WHOLE,WHOLE,HALF,WHOLE,HALF,HALF,WHOLE,HALF,WHOLE+WHOLE
-  };
+const note notes[] {
+    {NOTE_C4, HALF}, {NOTE_B3, HALF}, {NOTE_C4, HALF}, {NOTE_G4, 2*WHOLE}, {NOTE_C4, HALF},
+    {NOTE_B3, WHOLE}, {NOTE_A3, 2*WHOLE+HALF}, {NOTE_A3, HALF}, {NOTE_F4, HALF}, {NOTE_E4, HALF},
+    {NOTE_F4, HALF}, {NOTE_A4, 2*WHOLE}, {NOTE_A3, HALF}, {NOTE_G3, WHOLE}, {NOTE_G4, WHOLE},
+    {NOTE_G4, WHOLE}, {NOTE_F4, WHOLE}, {NOTE_E4, HALF}, {NOTE_D4, HALF}, {NOTE_C4, HALF},
+    {NOTE_A4, HALF}, {NOTE_A4, HALF}, {NOTE_G4, WHOLE}, {NOTE_A4, HALF}, {NOTE_A4, 2*WHOLE},
+    {NOTE_F4, HALF}, {NOTE_E4, HALF}, {NOTE_F4, WHOLE}, {NOTE_F4, HALF}, {NOTE_D4, HALF},
+    {NOTE_E4, WHOLE+HALF}, {NOTE_E4, HALF}, {NOTE_F4, HALF}, {NOTE_E4, WHOLE}, {NOTE_D4, WHOLE},
+    {NOTE_C4, HALF}, {NOTE_A3, HALF}, {NOTE_G3, HALF}, {NOTE_F3, WHOLE}, {NOTE_C4, WHOLE}, 
+    {NOTE_F4, WHOLE}, {NOTE_A4, HALF}, {NOTE_G4, WHOLE}, {NOTE_D4, HALF}, {NOTE_C4, HALF},
+    {NOTE_D4, WHOLE}, {NOTE_F4, HALF}, {NOTE_F4, 2*WHOLE}
+};
 
 int length;
 volatile byte state = LOW;
 
 void setup() {
+  length = sizeof(notes);
   pinMode(buzzerPin, OUTPUT);
-  length = sizeof(tune) / sizeof(tune[0]); 
-  
   pinMode(ledPin, OUTPUT);
   pinMode(interruptPin, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(interruptPin), interrupt, FALLING); 
 }
 
 void loop() {
-  for (int x=0; x<length && state==HIGH; x++) { 
-    tone(buzzerPin, tune[x]); 
-    delay(800 * duration[x]); 
+  for (int i=0; i<length && state==HIGH; i++) { 
+    int tone_to_play = notes[i].tone;
+    float duration_to_play = notes[i].duration;
+    tone(buzzerPin, tone_to_play); 
+    delay(800 * duration_to_play); 
     noTone(buzzerPin);
     delay(2);
   }
