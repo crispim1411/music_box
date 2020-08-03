@@ -21,8 +21,8 @@ Quanto à duração das notas, estão representadas conforme a relação abaixo:
 - colcheia : EIGHTH
 - semicolcheia : SIXTEENTH
 
-O tempo de cada intervalo é calculado informando a medida BPM de uma semínima no código.
-Geralmente esta informação consta no canto esquerdo superior da partitura;.
+O tempo de cada intervalo é calculado informando a medida de BPM de uma semínima no código.
+Geralmente esta informação consta no canto esquerdo superior da partitura.
 
 
 
