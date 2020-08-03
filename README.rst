@@ -3,8 +3,8 @@ Music Box
 
 Passe uma música de uma partitura para o Arduino. 
 
-Adicionando uma música
-=======================
+Estrutura
+==========
 A música é armazenada numa lista de notas, onde cada nota é composta da frequência e duração.
 
 Notação
@@ -20,6 +20,9 @@ Quanto à duração das notas, estão representadas conforme a relação abaixo:
 - semínima : QUARTER
 - colcheia : EIGHTH
 - semicolcheia : SIXTEENTH
+
+O tempo de cada intervalo é calculado informando a medida BPM de uma semínima no código.
+Geralmente esta informação consta no canto esquerdo superior da partitura;.
 
 
 
