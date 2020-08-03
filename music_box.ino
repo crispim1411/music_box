@@ -31,6 +31,10 @@
 #define EIGHTH 0.125
 #define SIXTEENTH 0.0625
 
+//calculo BPM em tempo
+#define BPM_QUARTER 140
+const float time_adjust = 60000*4/BPM_QUARTER;
+
 //pinos
 #define interruptPin 2
 #define buzzerPin 4
@@ -43,16 +47,24 @@ typedef struct {
 
 //lista de notas acompanhadas de sua duração
 const note notes[] {
-    {NOTE_C4, HALF}, {NOTE_B3, HALF}, {NOTE_C4, HALF}, {NOTE_G4, 2*WHOLE}, {NOTE_C4, HALF},
-    {NOTE_B3, WHOLE}, {NOTE_A3, 2*WHOLE+HALF}, {NOTE_A3, HALF}, {NOTE_F4, HALF}, {NOTE_E4, HALF},
-    {NOTE_F4, HALF}, {NOTE_A4, 2*WHOLE}, {NOTE_A3, HALF}, {NOTE_G3, WHOLE}, {NOTE_G4, WHOLE},
-    {NOTE_G4, WHOLE}, {NOTE_F4, WHOLE}, {NOTE_E4, HALF}, {NOTE_D4, HALF}, {NOTE_C4, HALF},
-    {NOTE_A4, HALF}, {NOTE_A4, HALF}, {NOTE_G4, WHOLE}, {NOTE_A4, HALF}, {NOTE_A4, 2*WHOLE},
-    {NOTE_F4, HALF}, {NOTE_E4, HALF}, {NOTE_F4, WHOLE}, {NOTE_F4, HALF}, {NOTE_D4, HALF},
-    {NOTE_E4, WHOLE+HALF}, {NOTE_E4, HALF}, {NOTE_F4, HALF}, {NOTE_E4, WHOLE}, {NOTE_D4, WHOLE},
-    {NOTE_C4, HALF}, {NOTE_A3, HALF}, {NOTE_G3, HALF}, {NOTE_F3, WHOLE}, {NOTE_C4, WHOLE}, 
-    {NOTE_F4, WHOLE}, {NOTE_A4, HALF}, {NOTE_G4, WHOLE}, {NOTE_D4, HALF}, {NOTE_C4, HALF},
-    {NOTE_D4, WHOLE}, {NOTE_F4, HALF}, {NOTE_F4, 2*WHOLE}
+  {NOTE_E4, QUARTER}, {NOTE_E4, QUARTER}, {NOTE_F4, QUARTER}, {NOTE_G4, QUARTER}, 
+  {NOTE_G4, QUARTER}, {NOTE_F4, QUARTER}, {NOTE_E4, QUARTER}, {NOTE_D4, QUARTER}, 
+  {NOTE_C4, QUARTER}, {NOTE_C4, QUARTER}, {NOTE_D4, QUARTER}, {NOTE_E4, QUARTER}, 
+  {NOTE_E4, QUARTER+EIGHTH}, {NOTE_D4, EIGHTH}, {NOTE_D4, HALF}, 
+  
+  {NOTE_E4, QUARTER}, {NOTE_E4, QUARTER}, {NOTE_F4, QUARTER}, {NOTE_G4, QUARTER}, 
+  {NOTE_G4, QUARTER}, {NOTE_F4, QUARTER}, {NOTE_E4, QUARTER}, {NOTE_D4, QUARTER}, 
+  {NOTE_C4, QUARTER}, {NOTE_C4, QUARTER}, {NOTE_D4, QUARTER}, {NOTE_E4, QUARTER}, 
+  {NOTE_D4, QUARTER+EIGHTH}, {NOTE_C4, EIGHTH}, {NOTE_C4, HALF},
+  
+  {NOTE_D4, QUARTER}, {NOTE_D4, QUARTER}, {NOTE_E4, QUARTER}, {NOTE_C4, QUARTER},
+  {NOTE_D4, QUARTER}, {NOTE_E4, EIGHTH}, {NOTE_F4, EIGHTH}, {NOTE_E4, QUARTER},
+  {NOTE_C4, QUARTER}, {NOTE_D4, QUARTER}, {NOTE_E4, EIGHTH}, {NOTE_F4, EIGHTH},
+  {NOTE_E4, QUARTER}, {NOTE_D4, QUARTER}, {NOTE_C4, QUARTER}, {NOTE_D4, QUARTER}, 
+  {NOTE_G3, HALF}, {NOTE_E4, QUARTER}, {NOTE_E4, QUARTER}, {NOTE_F4, QUARTER}, 
+  {NOTE_G4, QUARTER}, {NOTE_G4, QUARTER}, {NOTE_F4, QUARTER}, {NOTE_E4, QUARTER}, 
+  {NOTE_D4, QUARTER}, {NOTE_C4, QUARTER}, {NOTE_C4, QUARTER}, {NOTE_D4, QUARTER}, 
+  {NOTE_E4, QUARTER}, {NOTE_D4, QUARTER+EIGHTH}, {NOTE_C4, EIGHTH}, {NOTE_C4, HALF}
 };
 
 const int notes_length = sizeof(notes)/sizeof(note);
@@ -76,7 +88,7 @@ void loop() {
     int tone_to_play = notes[i].tone;
     float duration_to_play = notes[i].duration;
     tone(buzzerPin, tone_to_play); 
-    delay(800 * duration_to_play); 
+    delay(time_adjust * duration_to_play); 
     noTone(buzzerPin);
     delay(2);
   }
