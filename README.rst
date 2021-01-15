@@ -9,7 +9,7 @@ A música é armazenada numa lista de notas, onde cada nota é composta da frequ
 
 Notação
 ========
-As notas musicais estão representadas em letras e os acidentes musicais acompanhados da letra S (sustenido)
+As notas musicais estão representadas em letras e os acidentes musicais de sustenido acompanhados da letra S
 
 * Ex: D# -> DS
 
