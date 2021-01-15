@@ -13,7 +13,7 @@ As notas musicais estão representadas em letras e os acidentes musicais de sust
 
 * Ex: D# -> DS
 
-Quanto à duração das notas, estão representadas conforme a relação abaixo:
+Quanto à duração das notas, estão representadas tendo a semibreve como figura de tempo, conforme a relação abaixo:
 
 - semibreve : WHOLE
 - mínima : HALF
